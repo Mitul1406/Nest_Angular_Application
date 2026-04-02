@@ -97,6 +97,7 @@ export class AuthService {
 
     user.otp = otp;
     user.otpExpiry = otpExpiry;
+    this.mail.sendOtpEmail(body.email,otp);
 
     await this.userRepo.save(user);
 
@@ -109,9 +110,15 @@ export class AuthService {
         secret: this.config.get('REFRESH_SECRET'),
       });
 
+      console.log("payload", payload);
+      
+
       const user = await this.userRepo.findOne({
         where: { id: payload.sub },
       });
+
+      console.log("popopp->",user);
+      
 
       if (!user)
         throw new UnauthorizedException('Invalid token');
@@ -176,6 +183,26 @@ export class AuthService {
   });
 
   return { message: 'Logged out successfully' };
+}
+
+async resendOtp(email: string) {
+  const user = await this.userRepo.findOne({ where: { email } });
+
+  if (!user) {
+    throw new BadRequestException('User not found');
+  }
+
+  const otp = this.generateOtp();
+  const otpExpiry = this.generateOtpExpiry();
+
+  user.otp = otp;
+  user.otpExpiry = otpExpiry;
+
+  this.mail.sendOtpEmail(email, otp);
+
+  await this.userRepo.save(user);
+
+  return { message: 'OTP resent successfully' };
 }
 
   private generateOtp(): string {

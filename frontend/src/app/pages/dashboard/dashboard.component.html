@@ -1,0 +1,111 @@
+<app-header></app-header>
+
+<div class="container mt-5">
+  <h2>Dashboard</h2>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5>Create Task</h5>
+
+      <input
+        type="text"
+        class="form-control mb-2"
+        placeholder="Title"
+        [(ngModel)]="newTask.title"
+      />
+
+      <textarea
+        class="form-control mb-2"
+        placeholder="Description"
+        [(ngModel)]="newTask.description"
+      ></textarea>
+
+      <button class="btn btn-success" (click)="createTask()">
+        Create
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="tasks().length === 0" class="alert alert-info text-center">
+    No tasks() found
+  </div>
+
+  <div class="row" *ngIf="tasks().length > 0">
+    <div class="col-md-4 mb-3" *ngFor="let task of tasks()">
+      <div class="card">
+        <div class="card-body">
+
+          <!-- 🔥 Edit Mode -->
+          <div *ngIf="editId === task.id; else viewMode">
+
+            <input
+              type="text"
+              class="form-control mb-2"
+              [(ngModel)]="editTask.title"
+            />
+
+            <textarea
+              class="form-control mb-2"
+              [(ngModel)]="editTask.description"
+            ></textarea>
+
+            <button class="btn btn-sm btn-success me-2"
+                    (click)="updateTask(task.id)">
+              Save
+            </button>
+
+            <button class="btn btn-sm btn-secondary"
+                    (click)="cancelEdit()">
+              Cancel
+            </button>
+
+          </div>
+
+          <!-- 🔥 View Mode -->
+          <ng-template #viewMode>
+
+            <h5 class="card-title">{{ task.title }}</h5>
+            <p class="card-text">{{ task.description }}</p>
+
+            <p>
+              Status:
+              <span
+                [class.text-success]="task.completed"
+                [class.text-warning]="!task.completed"
+              >
+                {{ task.completed ? 'Completed' : 'Pending' }}
+              </span>
+            </p>
+
+            <p *ngIf="role === 'ADMIN'">
+              User: {{ task.user?.email }}
+            </p>
+
+            <button
+              class="btn btn-sm btn-primary me-2"
+              (click)="toggleStatus(task)"
+            >
+              Toggle
+            </button>
+
+            <button
+              class="btn btn-sm btn-warning me-2"
+              (click)="startEdit(task)"
+            >
+              Edit
+            </button>
+
+            <button
+              class="btn btn-sm btn-danger"
+              (click)="deleteTask(task.id)"
+            >
+              Delete
+            </button>
+
+          </ng-template>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

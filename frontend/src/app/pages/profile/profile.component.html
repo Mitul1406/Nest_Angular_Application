@@ -1,0 +1,15 @@
+<div class="header-profile">
+
+  <label class="avatar-wrapper">
+    <img
+      [src]="imageUrl || 'assets/default-avatar.png'"
+      class="avatar"
+    />
+    <input
+      type="file"
+      hidden
+      (change)="onFileSelected($event)"
+    />
+  </label>
+
+</div>

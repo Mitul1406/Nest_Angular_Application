@@ -14,6 +14,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/common/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { UpdateStatusDto } from './dto/update-task.dto';
+import { log } from 'console';
 
 @UseGuards(AuthGuard("jwt"))
 @Controller('tasks')
@@ -27,6 +28,7 @@ export class TasksController {
 
   @Get()
 findAll(@Req() req) {
+  
   return this.tasksService.findAll(
     req.user.userId,
     req.user.role,
@@ -38,10 +40,10 @@ findAll(@Req() req) {
     return this.tasksService.findOne(+id, req.user.userId);
   }
 
-  // @Put(':id')
-  // update(@Param('id') id: number, @Body() dto, @Req() req) {
-  //   return this.tasksService.update(+id, dto, req.user.userId);
-  // }
+  @Put(':id')
+  update(@Param('id') id: number, @Body() dto, @Req() req) {
+    return this.tasksService.update(+id, dto, req.user.userId);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: number, @Req() req) {

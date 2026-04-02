@@ -24,6 +24,11 @@ export class AuthController {
     );
   }
 
+  @Post("resend-otp")
+  resendOtp(@Body() body: {email:string}){
+    return this.authService.resendOtp(body.email);
+  }
+
   @Post('login')
   login(@Body() body: { email: string; password: string }) {
     return this.authService.login(body);

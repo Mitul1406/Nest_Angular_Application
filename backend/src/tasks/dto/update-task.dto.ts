@@ -5,3 +5,8 @@ export class UpdateStatusDto {
   @IsEnum(TaskStatus)
   status: TaskStatus;
 }
+
+export class UpdateTaskDto{
+  title:string;
+  description:string;
+}

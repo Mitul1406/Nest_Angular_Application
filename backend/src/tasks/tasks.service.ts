@@ -3,7 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Task } from './entities/task.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateStatusDto } from './dto/update-task.dto';
+import { UpdateStatusDto,UpdateTaskDto } from './dto/update-task.dto';
+import { log } from 'util';
 
 @Injectable()
 export class TasksService {
@@ -22,6 +23,7 @@ export class TasksService {
   }
 
   async findAll(userId: number, role: string) {
+    
   if (role === 'ADMIN') {
     return await this.taskRepo.find({
       relations: ['user'], 
@@ -46,17 +48,17 @@ export class TasksService {
     return task;
   }
 
-  // async update(
-  //   id: number,
-  //   updateTaskDto: UpdateTaskDto,
-  //   userId: number,
-  // ) {
-  //   const task = await this.findOne(id, userId);
+  async update(
+    id: number,
+    updateTaskDto: UpdateTaskDto,
+    userId: number,
+  ) {
+    const task = await this.findOne(id, userId);
 
-  //   Object.assign(task, updateTaskDto);
+    Object.assign(task, updateTaskDto);
 
-  //   return await this.taskRepo.save(task);
-  // }
+    return await this.taskRepo.save(task);
+  }
 
   async updateStatus(
   id: number,
