@@ -24,6 +24,9 @@ otp: string | null;
 @Column({ type: 'timestamp', nullable: true })
 otpExpiry: Date | null;
 
+@Column({ nullable: true })
+  profilePic: string;
+
   @Column({
     type: 'enum',
     enum: Role,
